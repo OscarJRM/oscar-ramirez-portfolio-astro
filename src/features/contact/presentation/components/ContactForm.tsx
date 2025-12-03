@@ -5,6 +5,8 @@ import { Input, Textarea } from "@heroui/input";
 import { motion } from "framer-motion";
 import type{ ContactFormData } from "../../types/contact.interface";
 import { addToast } from "@heroui/toast";
+import { FaDownload } from "react-icons/fa";
+import { PROFILE_CARD_DATA } from "../../../../constants/profile/profile_card";
 
 
 export default function ContactForm() {
@@ -29,43 +31,43 @@ export default function ContactForm() {
 
       if (result.success) {
         addToast({
-          title: "¡Mensaje enviado!",
-          description: "Te responderé pronto. Gracias por contactarme.",
+          title: "Message sent!",
+          description: "I'll get back to you soon. Thanks for reaching out.",
           color: "success"
         });
         reset();
       } else {
         addToast({
-          title: "Error al enviar",
-          description: result.message || "Ocurrió un error. Inténtalo de nuevo.",
+          title: "Error sending",
+          description: result.message || "An error occurred. Please try again.",
           color: "danger"
         });
       }
     } catch (error) {
       console.error('Error:', error);
       addToast({
-        title: "Error de conexión",
-        description: "Verifica tu conexión a internet e inténtalo de nuevo.",
+        title: "Connection error",
+        description: "Check your internet connection and try again.",
         color: "danger"
       });
     }
   };
 
   return (
-    <section className="pb-16 px-12 bg-black">
+    <section className="pb-16 px-4 md:px-12 bg-black">
       <div className="max-w-4xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-left mb-12 px-4"
+          className="text-center mb-12 px-4"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Let's Create
+            Get in <span className="text-primary-color">Touch</span>
           </h2>
-          <h3 className="text-4xl md:text-5xl font-bold mb-8">
-            Something <span className="text-primary-color">Amazing</span>
-          </h3>
+          <p className="text-gray-400 text-lg">
+            Have a project in mind or just want to say hi?
+          </p>
         </motion.div>
 
         {/* Form Card */}
@@ -73,10 +75,10 @@ export default function ContactForm() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="px-4"
+          className="px-4 mb-12"
         >
-          <Card className="transition-all duration-300">
-            <CardBody className="p-8">
+          <Card className="transition-all duration-300 bg-gray-900/50 border border-gray-800">
+            <CardBody className="p-6 md:p-8">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Name Field */}
                 <motion.div
@@ -101,6 +103,7 @@ export default function ContactForm() {
                     classNames={{
                       input: "text-white",
                       label: "text-gray-300",
+                      inputWrapper: "border-gray-700 hover:border-gray-500 focus-within:!border-blue-400"
                     }}
                   />
                 </motion.div>
@@ -128,6 +131,7 @@ export default function ContactForm() {
                     classNames={{
                       input: "text-white",
                       label: "text-gray-300",
+                      inputWrapper: "border-gray-700 hover:border-gray-500 focus-within:!border-blue-400"
                     }}
                   />
                 </motion.div>
@@ -155,6 +159,7 @@ export default function ContactForm() {
                     classNames={{
                       input: "text-white",
                       label: "text-gray-300",
+                      inputWrapper: "border-gray-700 hover:border-gray-500 focus-within:!border-blue-400"
                     }}
                   />
                 </motion.div>
@@ -167,18 +172,56 @@ export default function ContactForm() {
                 >
                   <Button
                     type="submit"
-                    color="secondary"
                     size="lg"
                     isLoading={isSubmitting}
-                    className="w-full font-semibold"
+                    className="w-full font-bold text-white shadow-lg shadow-blue-900/20"
+                    style={{ backgroundColor: 'var(--color-blue-400)' }}
                   >
-                    {isSubmitting ? "Sending..." : "Send"}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </motion.div>
               </form>
             </CardBody>
           </Card>
         </motion.div>
+
+        {/* Extra Links Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0, duration: 0.6 }}
+          className="flex flex-col items-center gap-8"
+        >
+            <div className="w-full h-px bg-gray-800" />
+            
+            <div className="flex flex-col md:flex-row items-center gap-6">
+                <Button
+                    as="a"
+                    href="/Galarza_Emilia_CV.pdf"
+                    download="Galarza_Emilia_CV.pdf"
+                    variant="bordered"
+                    className="font-semibold py-6 px-8 border-gray-700 text-gray-300 hover:text-white hover:border-gray-500"
+                    startContent={<FaDownload />}
+                >
+                    Download CV
+                </Button>
+
+                <div className="flex gap-6">
+                    {PROFILE_CARD_DATA.socialLinks.map((link, index) => (
+                        <a
+                            key={index}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-400 hover:text-white transition-colors text-2xl bg-gray-900 p-3 rounded-full border border-gray-800 hover:border-gray-600"
+                        >
+                            {link.icon || link.platform}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </motion.div>
+
       </div>
     </section>
   );

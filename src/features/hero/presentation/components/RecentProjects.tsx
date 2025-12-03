@@ -25,11 +25,8 @@ export default function RecentProjects({ data, onProjectClick }: RecentProjectsP
           className="text-left mb-12 px-4"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Recent Projects
+            Featured <span className="text-primary-color">Projects</span>
           </h2>
-          <h3 className="text-4xl md:text-5xl font-bold mb-8">
-            and <span className="text-primary-color">Achievements</span>
-          </h3>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4">

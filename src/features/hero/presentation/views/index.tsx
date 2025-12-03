@@ -15,7 +15,6 @@ export default function Hero_Feature({ onRecentProjectClick, onNavigate }: HeroF
       <ProfileCard onNavigate={onNavigate} />
       <RecentProjects onProjectClick={onRecentProjectClick} />
       <Skills />
-      <FrequentlyQuestions />
     </div>
   );
 }

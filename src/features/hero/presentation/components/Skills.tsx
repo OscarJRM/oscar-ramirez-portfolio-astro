@@ -1,143 +1,89 @@
 import { Card } from "@heroui/card";
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { SKILLS_DATA } from "../../../../constants/hero/skills";
-import DotPagination from "../../../../components/common/DotPagination";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@heroui/button";
 
-export default function Skills(){
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isAutoPlay, setIsAutoPlay] = useState(true);
-    const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
-    const skillsPerPage = 6;
-    
-    const ref = useRef(null);
-    const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
-    
-    const totalPages = Math.ceil(SKILLS_DATA.length / skillsPerPage);
-    const startIndex = (currentPage - 1) * skillsPerPage;
-    const endIndex = startIndex + skillsPerPage;
-    const currentSkills = SKILLS_DATA.slice(startIndex, endIndex);
+export default function Skills() {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
 
-    useEffect(() => {
-        if (!isAutoPlay || totalPages <= 1 || !isInView) return;
-
-        const interval = setInterval(() => {
-            setDirection(1);
-            setCurrentPage(prev => prev >= totalPages ? 1 : prev + 1);
-        }, 4000);
-
-        return () => clearInterval(interval);
-    }, [isAutoPlay, totalPages, isInView]);
-
-    // Cleanup timeout on unmount
-    useEffect(() => {
-        return () => {
-            if (resumeTimeoutRef.current) {
-                clearTimeout(resumeTimeoutRef.current);
-            }
-        };
-    }, []);
-
-    const handlePageClick = (page: number) => {
-        // Clear any existing resume timeout
-        if (resumeTimeoutRef.current) {
-            clearTimeout(resumeTimeoutRef.current);
+    const checkScroll = () => {
+        if (scrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
         }
+    };
 
-        setIsAutoPlay(false);
-        setDirection(page > currentPage ? 1 : -1);
-        setCurrentPage(page);
-        
-        // Resume after 8 seconds if no other interaction happens
-        resumeTimeoutRef.current = setTimeout(() => {
-            setIsAutoPlay(true);
-        }, 8000);
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            const { clientWidth } = scrollRef.current;
+            const scrollAmount = clientWidth / 2;
+            scrollRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
     };
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-16" ref={ref}>
-            <motion.div 
-                initial={{ opacity: 0, y: -20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-left mb-12"
-            >
-                <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                    My <span className="text-white">Skills &</span>
-                </h2>
-                <h2 className="text-4xl md:text-5xl font-bold">
-                    <span className="text-primary-color">Technologies</span>
-                </h2>
-            </motion.div>
-            
-            <div className="relative overflow-hidden mb-8">
-                <AnimatePresence mode="wait" custom={direction}>
-                    <motion.div 
-                        key={currentPage}
-                        custom={direction}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        variants={{
-                            enter: (direction: number) => ({
-                                x: direction > 0 ? '100%' : '-100%',
-                                opacity: 0
-                            }),
-                            center: {
-                                x: 0,
-                                opacity: 1
-                            },
-                            exit: (direction: number) => ({
-                                x: direction > 0 ? '-100%' : '100%',
-                                opacity: 0
-                            })
-                        }}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{
-                            x: { type: "spring", stiffness: 1000, damping: 80, duration: 0.2 },
-                            opacity: { duration: 0.1 }
-                        }}
+        <div className="w-full max-w-6xl mx-auto px-4 md:px-12 mb-20">
+            <div className="flex items-center justify-between mb-8 px-4">
+                <div className="text-left">
+                    <h2 className="text-3xl md:text-4xl font-bold">
+                        My <span className="text-primary-color">Skills</span>
+                    </h2>
+                </div>
+                
+                <div className="flex gap-2">
+                    <Button
+                        isIconOnly
+                        variant="flat"
+                        className="bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
+                        onPress={() => scroll('left')}
+                        isDisabled={!canScrollLeft}
                     >
-                        {currentSkills.map((skill, index) => (
-                            <motion.div
-                                key={startIndex + index}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                                transition={{ 
-                                    duration: 0.4, 
-                                    delay: isInView ? index * 0.1 : 0,
-                                    ease: "easeOut" 
-                                }}
-                            >
-                                <Card 
-                                    className="p-6 hover:bg-primary_custom-200 transition-all duration-300 cursor-pointer group h-full min-h-[140px] flex flex-col justify-center"
-                                >
-                                    <div className="flex items-center gap-4 h-full">
-                                        <div className="p-3 bg-gray-700/50 rounded-xl group-hover:bg-primary_custom-400 transition-colors flex-shrink-0">
-                                            <skill.icon className="w-8 h-8 text-white" />
-                                        </div>
-                                        <div className="flex-1 flex flex-col justify-center">
-                                            <h3 className="text-xl font-semibold text-white mb-2">
-                                                {skill.title}
-                                            </h3>
-                                            <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
-                                                {skill.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
+                        <ChevronLeft size={24} />
+                    </Button>
+                    <Button
+                        isIconOnly
+                        variant="flat"
+                        className="bg-gray-800 text-white hover:bg-gray-700 disabled:opacity-50"
+                        onPress={() => scroll('right')}
+                        isDisabled={!canScrollRight}
+                    >
+                        <ChevronRight size={24} />
+                    </Button>
+                </div>
             </div>
             
-            <DotPagination 
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={handlePageClick}
-            />
+            <div 
+                className="relative overflow-x-auto hide-scrollbar"
+                ref={scrollRef}
+                onScroll={checkScroll}
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+                <div className="flex gap-4 pb-4 px-4 min-w-max">
+                    {SKILLS_DATA.map((skill, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                            viewport={{ once: true }}
+                        >
+                            <Card 
+                                className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-gray-900/50 border border-gray-800 hover:border-cyan-400/50 hover:bg-cyan-400/10 transition-all duration-300 group cursor-pointer"
+                            >
+                                <skill.icon className="w-10 h-10 md:w-12 md:h-12 text-gray-400 group-hover:text-cyan-400 transition-colors duration-300" />
+                            </Card>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
