@@ -107,8 +107,8 @@ export default function Profile_Card({ onNavigate }: ProfileCardProps) {
 
               <Button
                 as="a"
-                href="/Galarza_Emilia_CV.pdf"
-                download="Galarza_Emilia_CV.pdf"
+                href="/Oscar_Ramirez_CV.pdf"
+                download="Oscar_Ramirez_CV.pdf"
                 variant="bordered"
                 className="font-semibold py-6 text-lg border-gray-700 text-gray-300 hover:text-white hover:border-gray-500"
                 startContent={<FaDownload />}

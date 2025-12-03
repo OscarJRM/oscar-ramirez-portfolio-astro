@@ -197,13 +197,13 @@ export default function ContactForm() {
             <div className="flex flex-col md:flex-row items-center gap-6">
                 <Button
                     as="a"
-                    href="/Galarza_Emilia_CV.pdf"
-                    download="Galarza_Emilia_CV.pdf"
+                    href="/Oscar_Ramirez_CV.pdf"
+                    download="Oscar_Ramirez_CV.pdf"
                     variant="bordered"
                     className="font-semibold py-6 px-8 border-gray-700 text-gray-300 hover:text-white hover:border-gray-500"
                     startContent={<FaDownload />}
                 >
-                    Download CV
+                    Download CV 
                 </Button>
 
                 <div className="flex gap-6">
