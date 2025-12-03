@@ -1,11 +1,4 @@
 import { useState, useEffect } from 'react';
-import { 
-  Home, 
-  User, 
-  FolderOpen, 
-  Briefcase, 
-  Mail
-} from 'lucide-react';
 
 interface FloatingNavbarProps {
   activeSection?: string;
@@ -33,11 +26,11 @@ const FloatingNavbar = ({ activeSection, onSectionChange }: FloatingNavbarProps)
   const shouldShowNavbar = !isScrolled || isHovered;
 
   const menuItems = [
-    { name: 'Home', href: '#inicio', icon: Home, sectionId: 'hero' },
-    { name: 'About', href: '#about', icon: User, sectionId: 'about' },
-    { name: 'Projects', href: '#projects', icon: FolderOpen, sectionId: 'projects' },
-    { name: 'Experience', href: '#experience', icon: Briefcase, sectionId: 'experience' },
-    { name: 'Contact', href: 'contact', icon: Mail, sectionId: 'contact' },
+    { name: 'Home', href: '#inicio', sectionId: 'hero' },
+    { name: 'About', href: '#about', sectionId: 'about' },
+    { name: 'Projects', href: '#projects', sectionId: 'projects' },
+    { name: 'Experience', href: '#experience', sectionId: 'experience' },
+    { name: 'Contact', href: 'contact', sectionId: 'contact' },
   ];
 
   const handleItemClick = (item: typeof menuItems[0], e: React.MouseEvent) => {
@@ -70,31 +63,26 @@ const FloatingNavbar = ({ activeSection, onSectionChange }: FloatingNavbarProps)
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {menuItems.map((item, index) => {
-            const IconComponent = item.icon;
             return (
               <a
                 key={index}
                 href={item.href}
                 onClick={(e) => handleItemClick(item, e)}
                 className={`
-                  group relative flex items-center justify-center w-10 h-10 rounded-full 
+                  group relative flex items-center justify-center px-4 py-2 rounded-full 
                   transition-all duration-300 ease-out
-                  hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20
-                  hover:shadow-lg hover:shadow-purple-500/25
-                  before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r 
-                  before:from-purple-500 before:to-pink-500 before:opacity-0 before:transition-opacity 
-                  before:duration-300 hover:before:opacity-20
-                  transform hover:scale-110 active:scale-95
+                  text-sm font-medium
+                  hover:bg-white/10
                   ${activeSection === item.sectionId 
-                    ? 'text-white bg-purple-500/30 shadow-purple-500/50' 
+                    ? 'text-white bg-white/15 shadow-lg shadow-white/5' 
                     : 'text-gray-400 hover:text-white'
                   }
                 `}
                 title={item.name}
               >
-                <IconComponent size={18} className="relative z-10" />
+                {item.name}
               </a>
             );
           })}
