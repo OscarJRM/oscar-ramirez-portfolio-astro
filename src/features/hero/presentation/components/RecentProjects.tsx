@@ -1,5 +1,6 @@
 import { RECENT_PROJECTS_DATA } from "../../../../constants/hero/recent_projects";
 import { Card, CardBody } from "@heroui/card";
+import { SiGithub } from "react-icons/si";
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -63,9 +64,23 @@ export default function RecentProjects({ data, onProjectClick }: RecentProjectsP
                     animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                     transition={{ delay: isInView ? 0.6 + (index * 0.1) : 0, duration: 0.5 }}
                   >
-                    <h3 className="text-2xl font-bold mb-2">
-                      {project.title}
-                    </h3>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-2xl font-bold">
+                        {project.title}
+                      </h3>
+                      {project.githubUrl && (
+                        <a 
+                          href={project.githubUrl}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-white transition-colors z-20 relative"
+                          onClick={(e) => e.stopPropagation()}
+                          title="View Code on GitHub"
+                        >
+                          <SiGithub size={24} />
+                        </a>
+                      )}
+                    </div>
                     <p className="text-gray-400 text-lg">
                       {project.description}
                     </p>

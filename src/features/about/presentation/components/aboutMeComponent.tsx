@@ -95,9 +95,9 @@ export default function AboutMeComponent({ data, index }: AboutMeComponentProps)
                     <div className="flex flex-wrap gap-2">
                       {data.tags.map((tag, tagIndex) => (
                         <Chip 
-                          variant="faded"
+                          variant="flat"
                           key={tagIndex}
-                          className="text-primary-color"
+                          className="bg-gray-800 text-gray-200 border border-gray-700 hover:border-primary-color transition-colors"
                         >
                           {tag}
                         </Chip>
@@ -126,9 +126,9 @@ export default function AboutMeComponent({ data, index }: AboutMeComponentProps)
                 <div className="flex flex-wrap gap-2">
                   {data.tags.map((tag, tagIndex) => (
                     <Chip 
-                      variant="faded"
+                      variant="flat"
                       key={tagIndex}
-                      className="text-primary-color"
+                      className="bg-gray-800 text-gray-200 border border-gray-700 hover:border-primary-color transition-colors"
                     >
                       {tag}
                     </Chip>
