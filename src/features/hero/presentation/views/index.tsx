@@ -11,13 +11,11 @@ interface HeroFeatureProps {
 export default function Hero_Feature({ onRecentProjectClick, onNavigate }: HeroFeatureProps) {
  
   return (
-    <>
-     <div>
-            <div className="p-5 md:hidden"><ProfileCard onNavigate={onNavigate} /></div>
-            <RecentProjects onProjectClick={onRecentProjectClick} />
-            <Skills />
-            <FrequentlyQuestions />
-          </div>
-    </>
+    <div className="space-y-12">
+      <ProfileCard onNavigate={onNavigate} />
+      <RecentProjects onProjectClick={onRecentProjectClick} />
+      <Skills />
+      <FrequentlyQuestions />
+    </div>
   );
 }
