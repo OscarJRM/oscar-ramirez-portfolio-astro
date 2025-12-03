@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+
+.text-primary-color{
+    color: var(--color-purple-400);
+}

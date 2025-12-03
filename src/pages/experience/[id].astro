@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { EXPERIENCE_DATA } from "../../constants/experience/experience_data";
+
+export async function getStaticPaths() {
+  return EXPERIENCE_DATA.map((experience) => ({
+    params: { id: experience.id },
+    props: { experience },
+  }));
+}
+
+const { experience } = Astro.props;
+const { id } = Astro.params;
+
+if (!experience) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title={`${experience.position} - ${experience.company}`}>
+  <main class="min-h-screen bg-black">
+    <div id="experience-detail-root"></div>
+  </main>
+</Layout>
+
+<script define:vars={{ experience }}>
+  import ExperienceDetailFeature from "../../features/experience/presentation/views/detail.tsx";
+  
+  // Esperamos a que el DOM esté listo
+  document.addEventListener('DOMContentLoaded', async () => {
+    const { createRoot } = await import('react-dom/client');
+    const { createElement } = await import('react');
+    
+    const container = document.getElementById('experience-detail-root');
+    if (container) {
+      const root = createRoot(container);
+      root.render(createElement(ExperienceDetailFeature, { experience }));
+    }
+  });
+</script>
+</Layout>
